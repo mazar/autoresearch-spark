@@ -1,4 +1,6 @@
-# autoresearch
+# autoresearch (DGX Spark Optimized)
+
+> **Note:** This repository is a fork of the original [autoresearch](https://github.com/karpathy/autoresearch) project by Andrej Karpathy. It has been specifically optimized and tuned for the DGX Spark (NVIDIA GB10) hardware.
 
 ![teaser](progress.png)
 
@@ -20,7 +22,7 @@ If you are new to neural networks, this ["Dummy's Guide"](https://x.com/hooeem/s
 
 ## Quick start
 
-**Requirements:** A single NVIDIA GPU (tested on H100), Python 3.10+, [uv](https://docs.astral.sh/uv/).
+**Requirements:** A single NVIDIA GPU (tested on DGX Spark GB10), Python 3.10+, [uv](https://docs.astral.sh/uv/).
 
 ```bash
 
@@ -68,7 +70,7 @@ pyproject.toml  — dependencies
 
 This code currently requires that you have a single NVIDIA GPU. In principle it is quite possible to support CPU, MPS and other platforms but this would also bloat the code. I'm not 100% sure that I want to take this on personally right now. People can reference (or have their agents reference) the full/parent nanochat repository that has wider platform support and shows the various solutions (e.g. a Flash Attention 3 kernels fallback implementation, generic device support, autodetection, etc.), feel free to create forks or discussions for other platforms and I'm happy to link to them here in the README in some new notable forks section or etc.
 
-Seeing as there seems to be a lot of interest in tinkering with autoresearch on much smaller compute platforms than an H100, a few extra words. If you're going to try running autoresearch on smaller computers (Macbooks etc.), I'd recommend one of the forks below. On top of this, here are some recommendations for how to tune the defaults for much smaller models for aspiring forks:
+Seeing as there seems to be a lot of interest in tinkering with autoresearch on much smaller compute platforms than an H100 (like the DGX Spark), the hyperparameters in `train.py` have been pre-tuned for the DGX Spark to maximize performance within the 5-minute budget (achieving a `val_bpb` of ~1.17). If you're going to try running autoresearch on other smaller computers (Macbooks etc.), I'd recommend one of the forks below. On top of this, here are some recommendations for how to tune the defaults for much smaller models for aspiring forks:
 
 1. To get half-decent results I'd use a dataset with a lot less entropy, e.g. this [TinyStories dataset](https://huggingface.co/datasets/karpathy/tinystories-gpt4-clean). These are GPT-4 generated short stories. Because the data is a lot narrower in scope, you will see reasonable results with a lot smaller models (if you try to sample from them after training).
 2. You might experiment with decreasing `vocab_size`, e.g. from 8192 down to 4096, 2048, 1024, or even - simply byte-level tokenizer with 256 possibly bytes after utf-8 encoding.
